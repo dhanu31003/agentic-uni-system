@@ -9,6 +9,7 @@ const studentRoutes = require('./routes/student');
 const courseRoutes  = require('./routes/course');
 const resultsRoutes = require('./routes/results');
 const chatRoutes = require('./routes/chat');
+const calendarRoutes = require('./routes/calendar');
 
 const app = express();
 app.use(cors());
@@ -36,6 +37,8 @@ app.use('/api/results',  resultsRoutes);
 app.use('/api/course',    courseRoutes);
 
 app.use('/api/chat', chatRoutes);
+
+app.use('/api/calendar', calendarRoutes);
 
 // Simple health check
 app.get('/', (req, res) => res.send('API Gateway up and running'));

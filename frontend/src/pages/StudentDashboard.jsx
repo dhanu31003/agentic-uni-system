@@ -1,10 +1,7 @@
 // frontend/src/pages/StudentDashboard.jsx
-import React from 'react';
-import { Link, useNavigate, Routes, Route } from 'react-router-dom';
 
-import StudentCourses from './StudentCourses';
-import StudentFees    from './StudentFees';
-import StudentResults from './StudentResults';
+import React from 'react';
+import { Link, Outlet, useNavigate } from 'react-router-dom';
 import ChatbotWidget from '../components/ChatbotWidget';
 
 export default function StudentDashboard() {
@@ -36,6 +33,11 @@ export default function StudentDashboard() {
               My Exam Results
             </Link>
           </li>
+          <li className="mb-2">
+            <Link to="calendar" className="text-blue-600 hover:underline">
+              Academic Calendar
+            </Link>
+          </li>
         </ul>
         <button
           onClick={logout}
@@ -47,13 +49,9 @@ export default function StudentDashboard() {
 
       {/* Main Content */}
       <main className="flex-1 p-8">
-        <Routes>
-          <Route path="courses" element={<StudentCourses />} />
-          <Route path="fees"    element={<StudentFees    />} />
-          <Route path="results" element={<StudentResults />} />
-          <Route index element={<h1 className="text-3xl mb-4">Welcome, Student</h1>} />
-        </Routes>
+        <Outlet />
       </main>
+
       <ChatbotWidget />
     </div>
   );

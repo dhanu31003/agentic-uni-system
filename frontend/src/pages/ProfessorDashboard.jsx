@@ -1,9 +1,7 @@
 // frontend/src/pages/ProfessorDashboard.jsx
-import React from 'react';
-import { Link, useNavigate, Routes, Route } from 'react-router-dom';
 
-import ResultsManagement from './ResultsManagement';
-import CourseApprovals    from './CourseApprovals';
+import React from 'react';
+import { Link, Outlet, useNavigate } from 'react-router-dom';
 import ChatbotWidget from '../components/ChatbotWidget';
 
 export default function ProfessorDashboard() {
@@ -30,6 +28,11 @@ export default function ProfessorDashboard() {
               Registration Approvals
             </Link>
           </li>
+          <li className="mb-2">
+            <Link to="calendar" className="text-blue-600 hover:underline">
+              Academic Calendar
+            </Link>
+          </li>
         </ul>
         <button
           onClick={logout}
@@ -41,12 +44,9 @@ export default function ProfessorDashboard() {
 
       {/* Main Content */}
       <main className="flex-1 p-8">
-        <Routes>
-          <Route index element={<h1 className="text-3xl mb-4">Welcome, Professor</h1>} />
-          <Route path="results"          element={<ResultsManagement />} />
-          <Route path="course-approvals" element={<CourseApprovals />} />
-        </Routes>
+        <Outlet />
       </main>
+
       <ChatbotWidget />
     </div>
   );

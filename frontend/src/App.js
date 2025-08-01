@@ -17,9 +17,11 @@ import ResultsApproval     from './pages/ResultsApproval';
 import StudentCourses      from './pages/StudentCourses';
 import StudentFees         from './pages/StudentFees';
 import StudentResults      from './pages/StudentResults';
+import CalendarViewer      from './pages/CalendarViewer';
 
 import CourseApprovals     from './pages/CourseApprovals';
-import CourseManagement   from './pages/CourseManagement';
+import CourseManagement    from './pages/CourseManagement';
+import CalendarManagement  from './pages/CalendarManagement';
 
 function PrivateRoute({ children, allowedRoles }) {
   const token = localStorage.getItem('token');
@@ -40,10 +42,10 @@ export default function App() {
     <Router>
       <Routes>
         {/* Public */}
-        <Route path="/"       element={<Login />} />
+        <Route path="/" element={<Login />} />
         <Route path="/register" element={<Register />} />
 
-        {/* Finance */}
+        {/* Finance Dashboard */}
         <Route
           path="/dashboard/finance/*"
           element={
@@ -53,11 +55,12 @@ export default function App() {
           }
         >
           <Route index element={<FeesPayment />} />
-          <Route path="fees"           element={<FeesPayment       />} />
-          <Route path="courses-manage" element={<CourseManagement />} />
+          <Route path="fees"           element={<FeesPayment        />} />
+          <Route path="courses-manage" element={<CourseManagement  />} />
+          <Route path="calendar-manage" element={<CalendarManagement />} />
         </Route>
 
-        {/* Student */}
+        {/* Student Dashboard */}
         <Route
           path="/dashboard/student/*"
           element={
@@ -66,13 +69,14 @@ export default function App() {
             </PrivateRoute>
           }
         >
-          <Route path="courses" element={<StudentCourses />} />
-          <Route path="fees"    element={<StudentFees    />} />
-          <Route path="results" element={<StudentResults />} />
           <Route index element={<h1 className="text-3xl mb-4">Welcome, Student</h1>} />
+          <Route path="courses"  element={<StudentCourses />} />
+          <Route path="fees"     element={<StudentFees    />} />
+          <Route path="results"  element={<StudentResults />} />
+          <Route path="calendar" element={<CalendarViewer />} />
         </Route>
 
-        {/* Professor */}
+        {/* Professor Dashboard */}
         <Route
           path="/dashboard/professor/*"
           element={
@@ -82,11 +86,12 @@ export default function App() {
           }
         >
           <Route index element={<h1 className="text-3xl mb-4">Welcome, Professor</h1>} />
-          <Route path="results"            element={<ResultsManagement />} />
-          <Route path="course-approvals"   element={<CourseApprovals  />} />
+          <Route path="results"          element={<ResultsManagement />} />
+          <Route path="course-approvals" element={<CourseApprovals   />} />
+          <Route path="calendar"         element={<CalendarViewer    />} />
         </Route>
 
-        {/* VC/HoD */}
+        {/* VC/HoD Dashboard */}
         <Route
           path="/dashboard/vc/*"
           element={
@@ -96,8 +101,9 @@ export default function App() {
           }
         >
           <Route index element={<h1 className="text-3xl mb-4">Welcome, HoD/VC</h1>} />
-          <Route path="results-approve" element={<ResultsApproval />} />
-          <Route path="course-approvals" element={<CourseApprovals />} />
+          <Route path="results-approve"   element={<ResultsApproval  />} />
+          <Route path="course-approvals"  element={<CourseApprovals  />} />
+          <Route path="calendar"          element={<CalendarViewer   />} />
         </Route>
 
         {/* Fallback */}

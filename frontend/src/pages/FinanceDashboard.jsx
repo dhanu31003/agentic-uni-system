@@ -1,4 +1,5 @@
 // frontend/src/pages/FinanceDashboard.jsx
+
 import React, { useState, useEffect } from 'react';
 import { Link, Outlet, useNavigate } from 'react-router-dom';
 import api from '../utils/api';
@@ -40,7 +41,8 @@ export default function FinanceDashboard() {
         <h1 className="text-xl font-bold mb-4">Finance Menu</h1>
 
         <p className="mb-4">
-          Overdue Fees: <span className="font-bold text-red-600">{overdueCount}</span>
+          Overdue Fees:{' '}
+          <span className="font-bold text-red-600">{overdueCount}</span>
         </p>
         <button
           onClick={handleNotify}
@@ -50,6 +52,11 @@ export default function FinanceDashboard() {
         </button>
 
         <ul>
+          <li className="mb-2">
+            <Link to="calendar-manage" className="text-blue-600 hover:underline">
+              Manage Calendar
+            </Link>
+          </li>
           <li className="mb-2">
             <Link to="courses-manage" className="text-blue-600 hover:underline">
               Manage Courses
@@ -70,10 +77,11 @@ export default function FinanceDashboard() {
         </button>
       </nav>
 
-      {/* Main Content via nested routes */}
+      {/* Main Content */}
       <main className="flex-1 p-8">
         <Outlet />
       </main>
+
       <ChatbotWidget />
     </div>
   );
