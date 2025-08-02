@@ -2,9 +2,9 @@ import React, { useState, useEffect } from 'react';
 import api from '../utils/api';
 
 export default function CourseApprovals() {
-  const [regs, setRegs]       = useState([]);
+  const [regs, setRegs] = useState([]);
   const [loading, setLoading] = useState(true);
-  const [error, setError]     = useState('');
+  const [error, setError] = useState('');
 
   const fetchPending = async () => {
     try {
@@ -17,9 +17,7 @@ export default function CourseApprovals() {
     }
   };
 
-  useEffect(() => {
-    fetchPending();
-  }, []);
+  useEffect(() => { fetchPending(); }, []);
 
   const decide = async (id, approve) => {
     try {
@@ -30,48 +28,64 @@ export default function CourseApprovals() {
     }
   };
 
-  if (loading) return <p>Loading pending registrations…</p>;
-  if (error)   return <p className="text-red-500">{error}</p>;
+  if (loading) return (
+    <div className="flex justify-center items-center h-64">
+      <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-blue-500"></div>
+    </div>
+  );
+  
+  if (error) return <p className="text-red-500 text-center py-8">{error}</p>;
 
   return (
-    <div>
-      <h2 className="text-2xl mb-4">Registration Approvals</h2>
-      <table className="min-w-full bg-white shadow rounded">
-        <thead>
-          <tr className="bg-gray-100 text-left">
-            <th className="p-2">Student ID</th>
-            <th className="p-2">Course</th>
-            <th className="p-2">Requested At</th>
-            <th className="p-2">Action</th>
-          </tr>
-        </thead>
-        <tbody>
-          {regs.map(r => (
-            <tr key={r._id} className="border-t">
-              <td className="p-2">{r.studentId}</td>
-              <td className="p-2">{r.courseCode}</td>
-              <td className="p-2">{new Date(r.requestedAt).toLocaleString()}</td>
-              <td className="p-2 space-x-2">
-                <button
-                  className="px-3 py-1 bg-green-600 text-white rounded hover:bg-green-700"
-                  onClick={() => decide(r._id, true)}
-                >
-                  Approve
-                </button>
-                <button
-                  className="px-3 py-1 bg-red-600 text-white rounded hover:bg-red-700"
-                  onClick={() => decide(r._id, false)}
-                >
-                  Reject
-                </button>
-              </td>
-            </tr>
-          ))}
-          {regs.length === 0 && (
-            <tr><td colSpan={4} className="p-4 text-center">No pending requests</td></tr>
-          )}
-        </tbody>
-      </table>
+    <div className="container mx-auto px-4 py-8">
+      <div className="bg-white rounded-xl shadow-md p-6">
+        <h2 className="text-3xl font-bold text-gray-800 mb-6">Registration Approvals</h2>
+        
+        <div className="overflow-x-auto rounded-lg border border-gray-200">
+          <table className="min-w-full divide-y divide-gray-200">
+            <thead className="bg-gray-50">
+              <tr>
+                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Student ID</th>
+                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Course</th>
+                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Requested At</th>
+                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Action</th>
+              </tr>
+            </thead>
+            <tbody className="bg-white divide-y divide-gray-200">
+              {regs.map(r => (
+                <tr key={r._id} className="hover:bg-gray-50">
+                  <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">{r.studentId}</td>
+                  <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">{r.courseCode}</td>
+                  <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
+                    {new Date(r.requestedAt).toLocaleString()}
+                  </td>
+                  <td className="px-6 py-4 whitespace-nowrap text-sm font-medium space-x-2">
+                    <button
+                      className="px-4 py-2 bg-green-600 text-white rounded-md hover:bg-green-700 transition-colors"
+                      onClick={() => decide(r._id, true)}
+                    >
+                      Approve
+                    </button>
+                    <button
+                      className="px-4 py-2 bg-red-600 text-white rounded-md hover:bg-red-700 transition-colors"
+                      onClick={() => decide(r._id, false)}
+                    >
+                      Reject
+                    </button>
+                  </td>
+                </tr>
+              ))}
+              {regs.length === 0 && (
+                <tr>
+                  <td colSpan={4} className="px-6 py-4 text-center text-sm text-gray-500">
+                    No pending registration requests
+                  </td>
+                </tr>
+              )}
+            </tbody>
+          </table>
+        </div>
+      </div>
     </div>
   );
 }

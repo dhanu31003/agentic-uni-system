@@ -1,6 +1,7 @@
 // frontend/src/pages/VCDashboard.jsx
+
 import React from 'react';
-import { Link, Routes, Route, useNavigate } from 'react-router-dom';
+import { Link, Outlet, useNavigate } from 'react-router-dom';
 import ResultsApproval from './ResultsApproval';
 import ChatbotWidget from '../components/ChatbotWidget';
 
@@ -13,36 +14,38 @@ export default function VCDashboard() {
   };
 
   return (
-    <div className="flex min-h-screen">
+    <div className="flex min-h-screen bg-gray-50">
       {/* Sidebar */}
-      <nav className="w-1/4 bg-gray-100 p-6">
-        <h1 className="text-xl font-bold mb-4">HoD/VC Menu</h1>
-        <ul>
-          <li className="mb-2">
-            <Link to="results-approve" className="text-blue-600 hover:underline">
+      <nav className="w-64 bg-white shadow-md">
+        <div className="p-6">
+          <h1 className="text-2xl font-bold text-gray-800 mb-6">VC/HoD Dashboard</h1>
+          <div className="space-y-2">
+            <Link
+              to="results-approve"
+              className="block px-4 py-3 text-gray-700 hover:bg-blue-50 hover:text-blue-600 rounded-lg transition-colors"
+            >
               Results Approval
             </Link>
-          </li>
-          {/* add more HoD/VC links here as needed */}
-        </ul>
-        <button
-          onClick={logout}
-          className="mt-6 px-4 py-2 bg-red-500 text-white rounded"
-        >
-          Logout
-        </button>
+            {/* add more links here */}
+          </div>
+        </div>
+        <div className="p-6 border-t border-gray-200">
+          <button
+            onClick={logout}
+            className="w-full px-4 py-2 bg-red-500 text-white rounded-lg hover:bg-red-600 transition-colors"
+          >
+            Logout
+          </button>
+        </div>
       </nav>
 
       {/* Main Content */}
       <main className="flex-1 p-8">
-        <Routes>
-          <Route
-            index
-            element={<h1 className="text-3xl mb-4">Welcome, HoD/VC</h1>}
-          />
-          <Route path="results-approve" element={<ResultsApproval />} />
-        </Routes>
+        <div className="max-w-7xl mx-auto">
+          <Outlet />
+        </div>
       </main>
+
       <ChatbotWidget />
     </div>
   );

@@ -2,9 +2,9 @@ import React, { useEffect, useState } from 'react';
 import api from '../utils/api';
 
 export default function StudentFees() {
-  const [fees, setFees]     = useState([]);
+  const [fees, setFees] = useState([]);
   const [loading, setLoading] = useState(true);
-  const [error, setError]     = useState('');
+  const [error, setError] = useState('');
 
   useEffect(() => {
     (async () => {
@@ -19,42 +19,58 @@ export default function StudentFees() {
     })();
   }, []);
 
-  if (loading) return <p>Loading your fee history…</p>;
-  if (error)   return <p className="text-red-500">{error}</p>;
+  if (loading) return (
+    <div className="flex justify-center items-center h-64">
+      <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-blue-500"></div>
+    </div>
+  );
+  
+  if (error) return <p className="text-red-500 text-center py-8">{error}</p>;
 
   return (
-    <div>
-      <h2 className="text-2xl mb-4">My Fee History</h2>
-      <table className="min-w-full bg-white shadow rounded">
-        <thead>
-          <tr className="bg-gray-100 text-left">
-            <th className="p-2">Academic</th>
-            <th className="p-2">Hostel</th>
-            <th className="p-2">Mess</th>
-            <th className="p-2">Misc.</th>
-            <th className="p-2">Status</th>
-            <th className="p-2">Due Date</th>
-          </tr>
-        </thead>
-        <tbody>
-          {fees.map(f => (
-            <tr key={f._id} className="border-t">
-              <td className="p-2">₹{f.academicFee}</td>
-              <td className="p-2">₹{f.hostelFee}</td>
-              <td className="p-2">₹{f.messFee}</td>
-              <td className="p-2">₹{f.miscFee}</td>
-              <td className={`p-2 font-medium ${
-                f.status === 'Paid'
-                  ? 'text-green-600'
-                  : f.status === 'Overdue'
-                  ? 'text-red-600'
-                  : 'text-yellow-600'
-              }`}>{f.status}</td>
-              <td className="p-2">{new Date(f.dueDate).toLocaleDateString()}</td>
-            </tr>
-          ))}
-        </tbody>
-      </table>
+    <div className="container mx-auto px-4 py-8">
+      <div className="bg-white rounded-xl shadow-md p-6">
+        <h2 className="text-3xl font-bold text-gray-800 mb-6">My Fee History</h2>
+        
+        <div className="overflow-x-auto rounded-lg border border-gray-200">
+          <table className="min-w-full divide-y divide-gray-200">
+            <thead className="bg-gray-50">
+              <tr>
+                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Academic</th>
+                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Hostel</th>
+                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Mess</th>
+                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Misc.</th>
+                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Status</th>
+                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Due Date</th>
+              </tr>
+            </thead>
+            <tbody className="bg-white divide-y divide-gray-200">
+              {fees.map(f => (
+                <tr key={f._id} className="hover:bg-gray-50">
+                  <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">₹{f.academicFee}</td>
+                  <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">₹{f.hostelFee}</td>
+                  <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">₹{f.messFee}</td>
+                  <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">₹{f.miscFee}</td>
+                  <td className="px-6 py-4 whitespace-nowrap text-sm">
+                    <span className={`px-2 py-1 rounded-full text-xs font-medium ${
+                      f.status === 'Paid'
+                        ? 'bg-green-100 text-green-800'
+                        : f.status === 'Overdue'
+                        ? 'bg-red-100 text-red-800'
+                        : 'bg-yellow-100 text-yellow-800'
+                    }`}>
+                      {f.status}
+                    </span>
+                  </td>
+                  <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
+                    {new Date(f.dueDate).toLocaleDateString()}
+                  </td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
+      </div>
     </div>
   );
 }

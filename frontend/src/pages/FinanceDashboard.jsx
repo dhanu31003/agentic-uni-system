@@ -10,14 +10,10 @@ export default function FinanceDashboard() {
   const [overdueCount, setOverdueCount] = useState(0);
 
   useEffect(() => {
-    (async () => {
-      try {
-        const { data } = await api.get('/finance/fees');
-        setOverdueCount(data.filter(f => f.status === 'Overdue').length);
-      } catch {
-        // ignore
-      }
-    })();
+    api
+      .get('/finance/fees')
+      .then(({ data }) => setOverdueCount(data.filter(f => f.status === 'Overdue').length))
+      .catch(() => {});
   }, []);
 
   const handleNotify = async () => {
@@ -35,51 +31,61 @@ export default function FinanceDashboard() {
   };
 
   return (
-    <div className="flex min-h-screen">
+    <div className="flex min-h-screen bg-gray-50">
       {/* Sidebar */}
-      <nav className="w-1/4 bg-gray-100 p-6">
-        <h1 className="text-xl font-bold mb-4">Finance Menu</h1>
+      <nav className="w-64 bg-white shadow-md">
+        <div className="p-6">
+          <h1 className="text-2xl font-bold text-gray-800 mb-6">Finance Dashboard</h1>
 
-        <p className="mb-4">
-          Overdue Fees:{' '}
-          <span className="font-bold text-red-600">{overdueCount}</span>
-        </p>
-        <button
-          onClick={handleNotify}
-          className="mb-4 w-full py-2 bg-yellow-500 text-white rounded hover:bg-yellow-600"
-        >
-          Send Due Reminders
-        </button>
+          <div className="bg-yellow-50 border border-yellow-200 rounded-lg p-4 mb-6">
+            <p className="text-sm text-gray-600 mb-1">Overdue Fees</p>
+            <p className="text-2xl font-bold text-red-600">{overdueCount}</p>
+          </div>
 
-        <ul>
-          <li className="mb-2">
-            <Link to="calendar-manage" className="text-blue-600 hover:underline">
+          <button
+            onClick={handleNotify}
+            className="w-full mb-6 py-2 bg-gradient-to-r from-yellow-500 to-yellow-400 text-white rounded-lg font-medium hover:from-yellow-600 hover:to-yellow-500 transition-all shadow-md"
+          >
+            Send Due Reminders
+          </button>
+
+          <div className="space-y-2">
+            <Link
+              to="calendar-manage"
+              className="block px-4 py-3 text-gray-700 hover:bg-blue-50 hover:text-blue-600 rounded-lg transition-colors"
+            >
               Manage Calendar
             </Link>
-          </li>
-          <li className="mb-2">
-            <Link to="courses-manage" className="text-blue-600 hover:underline">
+            <Link
+              to="courses-manage"
+              className="block px-4 py-3 text-gray-700 hover:bg-blue-50 hover:text-blue-600 rounded-lg transition-colors"
+            >
               Manage Courses
             </Link>
-          </li>
-          <li className="mb-2">
-            <Link to="fees" className="text-blue-600 hover:underline">
+            <Link
+              to="fees"
+              className="block px-4 py-3 text-gray-700 hover:bg-blue-50 hover:text-blue-600 rounded-lg transition-colors"
+            >
               Fees Payment
             </Link>
-          </li>
-        </ul>
+          </div>
+        </div>
 
-        <button
-          onClick={logout}
-          className="mt-6 px-4 py-2 bg-red-500 text-white rounded"
-        >
-          Logout
-        </button>
+        <div className="p-6 border-t border-gray-200">
+          <button
+            onClick={logout}
+            className="w-full px-4 py-2 bg-red-500 text-white rounded-lg hover:bg-red-600 transition-colors"
+          >
+            Logout
+          </button>
+        </div>
       </nav>
 
       {/* Main Content */}
       <main className="flex-1 p-8">
-        <Outlet />
+        <div className="max-w-7xl mx-auto">
+          <Outlet />
+        </div>
       </main>
 
       <ChatbotWidget />

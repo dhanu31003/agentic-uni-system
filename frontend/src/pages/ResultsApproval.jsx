@@ -17,60 +17,74 @@ export default function ResultsApproval() {
     }
   };
 
-  useEffect(() => {
-  fetch();
-}, []);
+  useEffect(() => { fetch(); }, []);
 
-  if (loading) return <p>Loading aggregated results…</p>;
-  if (error)   return <p className="text-red-500">{error}</p>;
+  if (loading) return (
+    <div className="flex justify-center items-center h-64">
+      <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-blue-500"></div>
+    </div>
+  );
+  
+  if (error) return <p className="text-red-500 text-center py-8">{error}</p>;
 
   return (
-    <div>
-      <h2 className="text-2xl mb-4">Results Approval</h2>
-      <table className="min-w-full bg-white shadow rounded">
-        <thead>
-          <tr className="bg-gray-100 text-left">
-            <th className="p-2">Student ID</th>
-            <th className="p-2">Subjects & Marks</th>
-            <th className="p-2">Total</th>
-            <th className="p-2">Average</th>
-            <th className="p-2">Approved</th>
-            <th className="p-2">Action</th>
-          </tr>
-        </thead>
-        <tbody>
-          {results.map(r => (
-            <tr key={r.studentId} className="border-t">
-              <td className="p-2">{r.studentId}</td>
-              <td className="p-2">
-                <ul className="list-disc list-inside">
-                  {r.subjects.map(s => (
-                    <li key={s.subject}>
-                      {s.subject}: {s.marks}
-                    </li>
-                  ))}
-                </ul>
-              </td>
-              <td className="p-2">{r.total}</td>
-              <td className="p-2">{r.average.toFixed(2)}</td>
-              <td className="p-2">{r.approved ? 'Yes' : 'No'}</td>
-              <td className="p-2">
-                {!r.approved && (
-                  <button
-                    className="px-3 py-1 bg-blue-600 text-white rounded hover:bg-blue-700"
-                    onClick={async () => {
-                      await api.post(`/results/approve/${r.studentId}`);
-                      fetch();
-                    }}
-                  >
-                    Approve
-                  </button>
-                )}
-              </td>
-            </tr>
-          ))}
-        </tbody>
-      </table>
+    <div className="container mx-auto px-4 py-8">
+      <div className="bg-white rounded-xl shadow-md p-6">
+        <h2 className="text-3xl font-bold text-gray-800 mb-6">Results Approval</h2>
+        
+        <div className="overflow-x-auto rounded-lg border border-gray-200">
+          <table className="min-w-full divide-y divide-gray-200">
+            <thead className="bg-gray-50">
+              <tr>
+                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Student ID</th>
+                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Subjects & Marks</th>
+                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Total</th>
+                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Average</th>
+                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Approved</th>
+                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Action</th>
+              </tr>
+            </thead>
+            <tbody className="bg-white divide-y divide-gray-200">
+              {results.map(r => (
+                <tr key={r.studentId} className="hover:bg-gray-50">
+                  <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">{r.studentId}</td>
+                  <td className="px-6 py-4 text-sm text-gray-500">
+                    <ul className="list-disc list-inside">
+                      {r.subjects.map(s => (
+                        <li key={s.subject}>
+                          <span className="font-medium">{s.subject}</span>: {s.marks}
+                        </li>
+                      ))}
+                    </ul>
+                  </td>
+                  <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900 font-medium">{r.total}</td>
+                  <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900 font-medium">{r.average.toFixed(2)}</td>
+                  <td className="px-6 py-4 whitespace-nowrap text-sm">
+                    <span className={`px-2 py-1 rounded-full text-xs font-medium ${
+                      r.approved ? 'bg-green-100 text-green-800' : 'bg-yellow-100 text-yellow-800'
+                    }`}>
+                      {r.approved ? 'Approved' : 'Pending'}
+                    </span>
+                  </td>
+                  <td className="px-6 py-4 whitespace-nowrap text-sm font-medium">
+                    {!r.approved && (
+                      <button
+                        className="px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700 transition-colors"
+                        onClick={async () => {
+                          await api.post(`/results/approve/${r.studentId}`);
+                          fetch();
+                        }}
+                      >
+                        Approve
+                      </button>
+                    )}
+                  </td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
+      </div>
     </div>
   );
 }
